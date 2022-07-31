@@ -27,6 +27,8 @@ public class BasicController {
         model.addAttribute("param1", "data1");
         model.addAttribute("param2", "data2");
 
+        model.addAttribute("data2", "Spring");
+
         return "basic/basic";
     }
 

@@ -22,5 +22,10 @@
 <ul>
     <li><a th:href="@{/ex/{param1}(param1=${param1}, param2=${param2})}">path variable + query parameter</a></li>
 </ul>
+
+<ul>
+    <li>'hello ' + ${data2} = <span th:text="'hello ' + ${data2}"></span></li>
+    <li>리터럴 대체 |hello ${data2}| = <span th:text="|hello ${data2}|"></span></li>
+</ul>
 </body>
 </html>
