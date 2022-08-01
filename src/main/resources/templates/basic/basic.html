@@ -5,27 +5,182 @@
     <title>Thymeleaf</title>
 </head>
 <body>
-<ul>
-    <li>th:text = <span th:text="${data}"></span> </li>
-    <li>th:utext = <span th:utext="${data}"></span> </li>
-</ul>
 
 <ul>
+    <h3>[단순 텍스트]</h3>
+    <li>th:text = <span th:text="${data}"></span> </li>
+    <li>th:utext = <span th:utext="${data}"></span> </li>
+<br>
     <li><span th:inline="none">[[...]] = </span>[[${data}]]</li>
     <li><span th:inline="none">[(...)] = </span>[(${data})]</li>
 </ul>
 
 <ul>
+    <h3>[날짜 포맷팅]</h3>
     <span th:text="${#temporals.format(localDateTime, 'yyyy-MM-dd HH:mm:ss')}"></span>
 </ul>
 
 <ul>
+    <h3>[URL 링크]</h3>
     <li><a th:href="@{/ex/{param1}(param1=${param1}, param2=${param2})}">path variable + query parameter</a></li>
 </ul>
 
 <ul>
+    <h3>[리터럴(소스코드상 고정된 값)]</h3>
     <li>'hello ' + ${data2} = <span th:text="'hello ' + ${data2}"></span></li>
     <li>리터럴 대체 |hello ${data2}| = <span th:text="|hello ${data2}|"></span></li>
 </ul>
+
+<ul>
+    <h3>[연산]</h3>
+    <li>Elvis 연산자
+        <ul>
+            <li>${data2}?: '데이터가 없음' = <span th:text="${data2}?: '데이터가 없음'"></span></li>
+            <li>${nullData}?: '데이터가 없음' = <span th:text="${nullData}?: '데이터가 없음'"></span></li>
+        </ul>
+    </li>
+    <li>No-Operation
+        <br>
+        <span>_의 경우 타임리프가 실행되지 않는 것처럼 동작하여 HTML 내용 그대로 활용할 수 있다.</span>
+        <ul>
+            <li>${data}?: _ = <span th:text="${data2}?: _">데이터가 없습니다.</span></li>
+            <li>${nullData}?: _ = <span th:text="${nullData}?: _">데이터가 없습니다.</span></li>
+        </ul>
+    </li>
+</ul>
+
+<ul>
+
+    <h3>[속성 추가]</h3>
+    <!--  attrappend: class="text large" / attrprepend: class="large text" / classappend: class속성에 자연스럽게 추가  -->
+    - th:attrappend = <input type="text" class="text" th:attrappend="class=' large'" /><br/>
+    - th:attrprepend = <input type="text" class="text" th:attrprepend="class='large '" /><br/>
+    - th:classappend = <input type="text" class="text" th:classappend="large"/><br/>
+
+    <h3>[checked 처리]</h3>
+    - checked o <input type="checkbox" name="active" th:checked="${isChecked}" /><br/>
+    - checked x <input type="checkbox" name="active" th:checked="${isNotChecked}" /><br/>
+    <br><span>HTML에서 checked는 true, false 값에 상관 없이 checked라는 속성만 있어도 체크가 된다.</span><br>
+    - checked=false <input type="checkbox" name="active" checked="false" /><br/>
+</ul>
+
+<ul>
+    <h3>[반복]</h3>
+    <h4>기본 테이블</h4>
+    <table border="1">
+        <tr>
+            <th>username</th>
+            <th>age</th>
+        </tr>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.name}">username</td>
+            <td th:text="${user.age}">0</td>
+        </tr>
+    </table>
+
+    <h4>반복 상태 유지</h4>
+    <table border="1">
+        <tr>
+            <th>count</th>
+            <th>username</th>
+            <th>age</th>
+            <th>etc</th>
+        </tr>
+        <!-- 지정한 변수명(user) 뒤에 Stat이 붙여진 형태로 사용한다는 규칙이 있으므로 userStat은 생략해도 되지만, 명시적으로 넣어주어도 됨 -->
+        <tr th:each="user, userStat: ${users}">
+            <td th:text="${userStat.count}">username</td>
+            <td th:text="${user.name}">username</td>
+            <td th:text="${user.age}">0</td>
+            <td>
+                index = <span th:text="${userStat.index}"></span>
+                count = <span th:text="${userStat.count}"></span>
+                size = <span th:text="${userStat.size}"></span>
+                even? = <span th:text="${userStat.even}"></span>
+                odd? = <span th:text="${userStat.odd}"></span>
+                first? = <span th:text="${userStat.first}"></span>
+                last? = <span th:text="${userStat.last}"></span>
+                current = <span th:text="${userStat.current}"></span>
+            </td>
+    </table>
+</ul>
+
+<ul>
+    <h3>[조건부 평가]</h3>
+    <h4>if, unless</h4>
+    <table border="1">
+        <tr>
+            <th>count</th>
+            <th>username</th>
+            <th>age</th>
+        </tr>
+        <tr th:each="user, userStat : ${users}">
+            <td th:text="${userStat.count}">1</td>
+            <td th:text="${user.name}">username</td>
+            <td>
+                <span th:text="${user.age}">0</span>
+                <span th:text="'미성년자'" th:if="${user.age lt 20}"></span>
+                <span th:text="'미성년자'" th:unless="${user.age ge 20}"></span>
+            </td>
+        </tr>
+    </table>
+
+    <h4>switch</h4>
+    <table border="1">
+        <tr>
+            <th>count</th>
+            <th>username</th>
+            <th>age</th>
+        </tr>
+        <tr th:each="user, userStat : ${users}">
+            <td th:text="${userStat.count}">1</td>
+            <td th:text="${user.name}">username</td>
+            <td th:switch="${user.age}">
+                <span th:case="10">10살</span>
+                <span th:case="20">20살</span>
+                <span th:case="*">기타</span>
+            </td>
+        </tr>
+    </table>
+</ul>
+
+<ul>
+    <h3>[블록]</h3>
+    <!--  th:block은 html 태그가 아닌 타임리프 유일한 자체 태그로 렌더링시 제거됨
+      -->
+    <th:block th:each="user : ${users}">
+        <div>
+            사용자 이름 <span th:text="${user.name}"></span>
+            사용자 나이 <span th:text="${user.age}"></span> </div>
+        <div>
+            요약 <span th:text="${user.name} + ' / ' + ${user.age}"></span>
+        </div>
+    </th:block>
+</ul>
+
+<ul>
+    <h3>[자바스크립트 인라인]</h3>
+    <span>소스코드 보기로 결과 확인하기</span>
+    <script th:inline="javascript">
+        var username = [[${user.name}]];
+        var age = [[${user.age}]];
+
+        // 자바스크립트 내추럴 템플릿
+        // 랜더링 될 때 주석 값을 사용할 수 있도록 제공함. test user name은 html파일을 열었을 때의 결과로 볼 수 있음.
+        var username2 = /*[[${user.name}]]*/ "test user name";
+
+        // 객체
+        // 객체를 JSON형식으로 넣어줌.
+        var user = [[${user}]];
+    </script>
+
+    <h3>[자바스크립트 인라인 each]</h3>
+    <span>소스코드 보기로 결과 확인하기</span>
+    <script th:inline="javascript">
+        [# th:each="user, stat : ${users}"]
+        var user[[${stat.count}]] = [[${user}]];
+        [/]
+    </script>
+</ul>
+
 </body>
 </html>
