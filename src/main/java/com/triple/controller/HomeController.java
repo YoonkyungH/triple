@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -66,16 +67,35 @@ public class HomeController {
     /**
      * version 3
      */
-    @GetMapping("/")
-    public String homeLogin(HttpServletRequest request, Model model) {
-        // 세션이 없으면 home
-        // getSession의 옵션을 false로 주지 않으면 새로 생성해버리기 때문에 꼭 false로
-        HttpSession session = request.getSession(false);
-        if (session == null) {
-            return "home";
-        }
+//    @GetMapping("/")
+//    public String homeLogin(HttpServletRequest request, Model model) {
+//        // 세션이 없으면 home
+//        // getSession의 옵션을 false로 주지 않으면 새로 생성해버리기 때문에 꼭 false로
+//        HttpSession session = request.getSession(false);
+//        if (session == null) {
+//            return "home";
+//        }
+//
+//        Member loginMember = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
+//        // 세션이 회원 데이터가 없으면 home
+//        if (loginMember == null) {
+//            return "home";
+//        }
+//
+//        // 세션이 유지되면 로그인으로 이동
+//        model.addAttribute("member", loginMember);
+//        return "loginHome";
+//    }
 
-        Member loginMember = (Member) session.getAttribute(SessionConst.LOGIN_MEMBER);
+    /**
+     * 스프링에서 지원하는 @SessionAttribute
+     * 세션을 찾고, 세션에 들어있는 데이터를 찾는 번거로운 과정을 스프링이 처리
+     */
+    @GetMapping("/")
+    public String homeLoginSpring(
+            @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember,
+            Model model
+    ) {
         // 세션이 회원 데이터가 없으면 home
         if (loginMember == null) {
             return "home";
