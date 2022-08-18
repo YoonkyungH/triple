@@ -6,11 +6,13 @@ import com.triple.controller.filter.LoginCheckFilter;
 import com.triple.controller.interceptor.LogInterceptor;
 import com.triple.controller.interceptor.LoginCheckInterceptor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LogInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/css/**", "/*.ico", "/error");    // 제외할 것들
+                .excludePathPatterns("/css/**", "/*.ico", "/error", "/error-page/**");    // 제외할 것들
 
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(2)
@@ -44,6 +46,9 @@ public class WebConfig implements WebMvcConfigurer {
         filterRegistrationBean.setFilter(new LogFilter());
         filterRegistrationBean.setOrder(1);
         filterRegistrationBean.addUrlPatterns("/*");
+
+        // 아래는 클라이언트 요청, 오류 페이지 요청 둘 다 필터가 호출 되도록 했다.
+        filterRegistrationBean.setDispatcherTypes(DispatcherType.REQUEST, DispatcherType.ERROR);
 
         return filterRegistrationBean;
     }
