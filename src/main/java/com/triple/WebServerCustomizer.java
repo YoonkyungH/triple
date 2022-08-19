@@ -6,7 +6,9 @@ import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-//@Component    // 스프링부트가 제공하는 기본 오류 매커니즘 사용을 위해 주석처리
+// @Component를 사용할 경우(서블릿 오류 페이지 방식)
+// WAS에 예외가 전달되거나 response.sendError()가 호출되면 예외 페이지 경로가 호출
+//@Component    // 스프링부트가 제공하는 기본 오류 매커니즘 사용(BasicErrorController)을 위해서는 주석처리 필요
 public class WebServerCustomizer implements WebServerFactoryCustomizer<ConfigurableWebServerFactory> {
 
     @Override
