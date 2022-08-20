@@ -5,10 +5,12 @@ import com.triple.controller.filter.LogFilter;
 import com.triple.controller.filter.LoginCheckFilter;
 import com.triple.controller.interceptor.LogInterceptor;
 import com.triple.controller.interceptor.LoginCheckInterceptor;
+import com.triple.resolver.MyHandlerExceptionResolver;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -26,21 +28,31 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) { // WebMvcConfigurer가 제공하는 인터셉터 등록
-        registry.addInterceptor(new LogInterceptor())
-                .order(1)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/css/**", "/*.ico", "/error", "/error-page/**");    // 제외할 것들
-
-        registry.addInterceptor(new LoginCheckInterceptor())
-                .order(2)
-                .addPathPatterns("/**")
-                .excludePathPatterns(
-                        "/", "/members/add", "/login", "/logout",
-                        "/css/**", "/*.ico", "/error"
-                );
+        /**
+         * 예외처리 테스트를 위해 잠시 주석처리 (로그인 하지 않아도 바로 접속할 수 있도록)
+         */
+//        registry.addInterceptor(new LogInterceptor())
+//                .order(1)
+//                .addPathPatterns("/**")
+////                .excludePathPatterns("/css/**", "/*.ico", "/error", "/error-page/**");    // 제외할 것들
+//                .excludePathPatterns("/css/**", "/*.ico", "/error", "/error-page/**");    // 임시로 로그인 인증 꺼둠
+//
+//
+//        registry.addInterceptor(new LoginCheckInterceptor())
+//                .order(2)
+//                .addPathPatterns("/**")
+//                .excludePathPatterns(
+//                        "/", "/members/add", "/login", "/logout",
+//                        "/css/**", "/*.ico", "/error"
+//                );
     }
 
-//    @Bean
+    @Override
+    public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
+        resolvers.add(new MyHandlerExceptionResolver());
+    }
+
+    //    @Bean
     public FilterRegistrationBean logFilter() {
         FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(new LogFilter());
