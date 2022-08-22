@@ -1,40 +1,16 @@
 package com.triple.domain.member;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Repository;
+import javax.swing.text.html.Option;
+import java.util.List;
+import java.util.Optional;
 
-import java.util.*;
+public interface MemberRepository {
 
-@Slf4j
-@Repository
-public class MemberRepository {
+    Member save(Member member);
 
-    private static Map<Long, Member> store = new HashMap<>();
-//    private static long sequence = 0L;
+    Optional<Member> findById(Long id);
 
-    public Member save(Member member) {
-//        member.setId(++sequence);
-        log.info("save: member={}", member);
-        store.put(member.getId(), member);
+    Optional<Member> findByName(String name);
 
-        return member;
-    }
-
-    public Member findById(Long id) {
-        return store.get(id);
-    }
-
-    public Optional<Member> findByLoginId(String loginId) {
-        return findAll().stream()
-                .filter(m->m.getLoginId().equals(loginId))
-                .findFirst();
-    }
-
-    public List<Member> findAll() {
-        return new ArrayList<>(store.values());
-    }
-
-    public void clearStore() {
-        store.clear();
-    }
+    List<Member> findAll();
 }
