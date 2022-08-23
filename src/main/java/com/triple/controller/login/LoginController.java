@@ -123,16 +123,16 @@ public class LoginController {
 //        return "redirect:/";
 //    }
 //
-//    @PostMapping("/logout")
-//    public String logout(HttpServletRequest request) {
-//        // 세션 삭제
-//        HttpSession session = request.getSession(false);
-//        if (session != null) {
-//            session.invalidate();
-//        }
-//
-//        return "redirect:/";
-//    }
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        // 세션 삭제
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        return "redirect:/";
+    }
 
     /**
      * version 4

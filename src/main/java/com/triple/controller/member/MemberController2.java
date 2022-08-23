@@ -1,7 +1,8 @@
+
 package com.triple.controller.member;
 
 import com.triple.domain.member.Member;
-import com.triple.domain.member.MemberRepository;
+import com.triple.domain.member.MemberRepository2;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -14,10 +15,10 @@ import javax.validation.Valid;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/members")
-public class MemberController {
+@RequestMapping("/members2")
+public class MemberController2 {
 
-    private final MemberRepository memberRepository;
+    private final MemberRepository2 memberRepository2;
 
     @GetMapping("/add")
     public String addForm(@ModelAttribute("member") Member member) {
@@ -30,7 +31,7 @@ public class MemberController {
             return "members/addMemberForm";
         }
 
-        memberRepository.save(member);
+        memberRepository2.save(member);
         return "redirect:/";
     }
 }

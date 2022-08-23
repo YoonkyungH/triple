@@ -3,7 +3,7 @@ package com.triple;
 import com.triple.domain.Category;
 import com.triple.domain.Post;
 import com.triple.domain.member.Member;
-import com.triple.domain.member.MemberRepository;
+import com.triple.domain.member.MemberRepository2;
 import com.triple.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct;
 public class TestDataInit {
 
     private final PostRepository postRepository;
-    private final MemberRepository memberRepository;
+    private final MemberRepository2 memberRepository2;
 
     /**
      * 테스트 데이터
@@ -31,6 +31,6 @@ public class TestDataInit {
         member.setPassword("userA!");
         member.setName("유저A");
 
-        memberRepository.save(member);
+        memberRepository2.save(member);
     }
 }
